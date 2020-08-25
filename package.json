@@ -4,7 +4,7 @@
   "description": "A data visualization library built on top of Plotly.js ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate-docs": "node_modules/.bin/jsdoc -c jsdoc.json"
   },
   "repository": {
     "type": "git",
@@ -15,7 +15,17 @@
     "charts",
     "plotly"
   ],
-  "author": "Mattia Ronzoni",
+  "author": "Mattia Ronzoni <mattia.ronzoni@dvisionlab.com> (https://www.dvisionlab.com)",
+  "contributors": [
+    "Simone Manini <simone.manini@dvisionlab.com> (https://www.dvisionlab.com)"
+  ],
+  "dependencies": {
+    "lodash": "^4.17.15"
+  },
+  "devDependencies": {
+    "docdash": "^1.2.0",
+    "jsdoc": "^3.6.4"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/dvisionlab/diglett/issues"
