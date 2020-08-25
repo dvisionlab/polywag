@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>components/timeserie.js - diglett</title>
+    
+    <meta name="description" content="A data visualization library built on top of Plotly.js" />
+    
+        <meta name="keywords" content="dataviz, charts, plotly" />
+        <meta name="keyword" content="dataviz, charts, plotly" />
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/dvisionlab/diglett" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><h3>Classes</h3><ul><li><a href="BaseAxis.html">BaseAxis</a></li><li><a href="CardTrace.html">CardTrace</a></li><li><a href="Coloraxis.html">Coloraxis</a></li><li><a href="DateAxis.html">DateAxis</a></li><li><a href="GaugeTrace.html">GaugeTrace</a></li><li><a href="HeatmapComponent.html">HeatmapComponent</a><ul class='methods'><li data-type='method' style='display: none;'><a href="HeatmapComponent.html#update">update</a></li></ul></li><li><a href="HeatmapTrace.html">HeatmapTrace</a></li><li><a href="Hist2dTrace.html">Hist2dTrace</a></li><li><a href="HistogramTrace.html">HistogramTrace</a></li><li><a href="LineTrace.html">LineTrace</a></li><li><a href="PercentageAxis.html">PercentageAxis</a></li><li><a href="ScatterTrace.html">ScatterTrace</a></li><li><a href="TimeAxis.html">TimeAxis</a></li><li><a href="TimeserieComponent.html">TimeserieComponent</a><ul class='methods'><li data-type='method' style='display: none;'><a href="TimeserieComponent.html#update">update</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">components/timeserie.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Plotly from "plotly.js-dist";
+import { find } from "lodash";
+
+import { LayoutTimeserie } from "../layouts/LayoutTimeserie.js";
+import { LineTrace } from "../charts/scatters.js";
+import { CardTrace } from "../charts/indicators.js";
+import { HistogramTrace } from "../charts/histograms.js";
+
+/**
+ * Timeserie component, composed by
+ * a linechart, an histogram, a numeric label with
+ * last datapoint and a trend arrow
+ */
+export class TimeserieComponent {
+  /**
+   * Create a timeserie component.
+   * @param {String} divId - The id of the target div.
+   * @param {Object} config - The config object.
+   */
+  constructor(divId, config) {
+    this.divId = divId;
+    this.data = [];
+    this.layout = new LayoutTimeserie();
+    this.labelchart = new CardTrace();
+    this.linechart = new LineTrace("x1", "y1");
+    this.histchart = new HistogramTrace("x2", "y2", "h");
+
+    this.axisSpan = 3600000 / 12; // 5min
+    this.color =
+      config &amp;&amp; config.color ? config.color : "rgba(231, 244, 89, 0.7)";
+    this.title = config &amp;&amp; config.title ? config.title : "";
+    this.reverseIndicator = config &amp;&amp; config.reverse ? config.reverse : false;
+
+    this.plotlyConfiguration = {
+      responsive: true,
+      displayModeBar: false,
+      hovermode: "closest",
+      scrollZoom: false
+    };
+
+    this.initialize();
+  }
+
+  /**
+   * Initialize the component.
+   * @private
+   */
+  initialize() {
+    // bind label to line chart axis
+    this.labelchart.bindTo(this.layout.xaxis, this.layout.yaxis);
+    // specify histogram number of bins
+    this.histchart.ybins = {
+      size: null
+    };
+    // specify reverse colorscale for indicator
+    if (this.reverseIndicator) {
+      this.labelchart.colorScale = "reverse";
+    }
+    // spread colors
+    this.linechart._color = this.color;
+    this.histchart._color = this.color;
+    // set title
+    this.setupTitle();
+
+    Plotly.newPlot(
+      this.divId,
+      [this.linechart, this.histchart, this.labelchart],
+      this.layout,
+      this.plotlyConfiguration
+    );
+  }
+
+  /**
+   * Setup the chart title as plotly annotation.
+   * @private
+   */
+  setupTitle() {
+    let titleAnnotation = find(this.layout.annotations, ["_tag", "title"]);
+    titleAnnotation.bgcolor = this.color;
+    titleAnnotation.bordercolor = this.color;
+    titleAnnotation.text = this.title;
+    titleAnnotation.font.color = "#1e1e1e";
+  }
+
+  /**
+   * Utility function to compute the number of bins that best fit the input data.
+   * @private
+   */
+  computeBestNumberOfBins() {
+    let min = Math.min(...this.data.value);
+    let max = Math.max(...this.data.value);
+    let size = Math.ceil((max - min) / 10);
+    let final = size > 1 ? size : size / 5;
+    return final;
+  }
+
+  /**
+   * Update component.
+   * @param {Array} data - Input data
+   */
+  update(data) {
+    // store
+    this.data = data;
+    // if not set, compute bins
+    this.histchart.ybins.size = this.histchart.ybins.size
+      ? this.histchart.ybins.size
+      : this.computeBestNumberOfBins();
+    //update line chart
+    this.linechart.x = data.timestamp.map(t => Date.parse(t));
+    this.linechart.y = data.value;
+    //update hist chart
+    this.histchart.x = data.value;
+    this.histchart.y = data.value;
+    //update indicators
+    this.labelchart.valuesArray = data.value;
+    //update render
+    Plotly.react(
+      this.divId,
+      [this.linechart, this.histchart, this.labelchart],
+      this.layout,
+      this.plotlyConfiguration
+    );
+
+    this.scrollXaxis();
+    this.resizeYaxis();
+  }
+
+  /**
+   * Resize Y axis based on input data.
+   * @private
+   */
+  resizeYaxis() {
+    let seriesData = this.data;
+    let datalength = seriesData.value.length;
+
+    let subseries = [seriesData].map(arr =>
+      arr.value.slice(datalength - this.axisSpan + 1)
+    );
+    let subseriesMaxValue = Math.max(...subseries.map(arr => Math.max(...arr)));
+    let subseriesMinValue = Math.max(...subseries.map(arr => Math.min(...arr)));
+    let delta = subseriesMaxValue - subseriesMinValue;
+
+    let newRange = [
+      subseriesMinValue - delta / 10,
+      subseriesMaxValue + delta / 10
+    ];
+
+    // apply
+    ["yaxis", "yaxis2"].map(tag => {
+      this.layout[tag].range = newRange;
+    });
+  }
+
+  /**
+   * Scroll X axis to show only last data, based on dataSpan value.
+   * @private
+   */
+  scrollXaxis() {
+    // Make x axis scrolling
+    let datalength = this.data.value.length;
+    let dataSpan =
+      new Date(this.data.timestamp[datalength - 1]) -
+      new Date(this.data.timestamp[0]);
+    let axisSpan = 3600000 / 12; // 5min
+    if (dataSpan > axisSpan) {
+      let end = new Date(this.data.timestamp[datalength - 1]);
+      let start = end - axisSpan;
+      this.layout.xaxis.range = [start, end];
+    }
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>

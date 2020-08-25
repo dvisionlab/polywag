@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>charts/indicators.js - diglett</title>
+    
+    <meta name="description" content="A data visualization library built on top of Plotly.js" />
+    
+        <meta name="keywords" content="dataviz, charts, plotly" />
+        <meta name="keyword" content="dataviz, charts, plotly" />
+    
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <input type="text" id="nav-search" placeholder="Search" />
+    
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/dvisionlab/diglett" target="_blank" class="menu-item" id="repository" >Github repo</a></h2><h3>Classes</h3><ul><li><a href="BaseAxis.html">BaseAxis</a></li><li><a href="CardTrace.html">CardTrace</a></li><li><a href="Coloraxis.html">Coloraxis</a></li><li><a href="DateAxis.html">DateAxis</a></li><li><a href="GaugeTrace.html">GaugeTrace</a></li><li><a href="HeatmapComponent.html">HeatmapComponent</a><ul class='methods'><li data-type='method' style='display: none;'><a href="HeatmapComponent.html#update">update</a></li></ul></li><li><a href="HeatmapTrace.html">HeatmapTrace</a></li><li><a href="Hist2dTrace.html">Hist2dTrace</a></li><li><a href="HistogramTrace.html">HistogramTrace</a></li><li><a href="LineTrace.html">LineTrace</a></li><li><a href="PercentageAxis.html">PercentageAxis</a></li><li><a href="ScatterTrace.html">ScatterTrace</a></li><li><a href="TimeAxis.html">TimeAxis</a></li><li><a href="TimeserieComponent.html">TimeserieComponent</a><ul class='methods'><li data-type='method' style='display: none;'><a href="TimeserieComponent.html#update">update</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">charts/indicators.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * INDICATORS TRACES
+ */
+
+/**
+ * Gauge Trace
+ */
+export class GaugeTrace {
+  constructor() {
+    this.title = "";
+    this.type = "indicator";
+    this.mode = "gauge+number";
+    this.value = 0;
+    this.delta = { reference: null };
+    this.gauge = {
+      bar: { color: "green" },
+      axis: { visible: true, range: [0, 0] },
+      steps: [
+        { range: [0, 0], color: "lightgrey" },
+        { range: [0, 0], color: "darkgrey" },
+        { range: [0, 0], color: "grey" }
+      ]
+    };
+    this.domain = { x: [0.55, 0.8], y: [0.55, 1] };
+
+    // Internal variables
+    this._trafficLight = null;
+  }
+
+  set range(borders) {
+    this.gauge.axis.range = borders;
+  }
+
+  set valuesArray(data) {
+    let last = data.slice(-1).pop();
+    this.value = last;
+
+    if (this._trafficLight) {
+      if (last &lt;= this._trafficLight.yellowTreshold) {
+        this.gauge.bar.color = "green";
+      } else if (last > this._trafficLight.redTreshold) {
+        this.gauge.bar.color = "red";
+      } else {
+        this.gauge.bar.color = "yellow";
+      }
+    }
+  }
+
+  bindTo(xaxis, yaxis) {
+    let _x1 = xaxis.domain[0];
+    let _x2 = xaxis.domain[1];
+    let _y1 = yaxis.domain[0];
+    let _y2 = yaxis.domain[1];
+
+    let dx = _x2 - _x1;
+    let dy = _y2 - _y1;
+
+    let reduction = 10;
+
+    this.domain.x = [_x1 + dx / reduction, _x2 - dx / reduction];
+    this.domain.y = [_y1 + dy / reduction, _y2 - dy / reduction];
+  }
+
+  set trafficLight(tresholds) {
+    this._trafficLight = {};
+    this._trafficLight.yellowTreshold = tresholds[0];
+    this._trafficLight.redTreshold = tresholds[1];
+  }
+
+  set barSteps(steps) {
+    let min = this.gauge.axis.range[0];
+    let max = this.gauge.axis.range[1];
+    this.gauge.steps[0].range = [min, steps[0]];
+    this.gauge.steps[1].range = [steps[0], steps[1]];
+    this.gauge.steps[2].range = [steps[1], max];
+  }
+}
+
+/**
+ * Card Trace
+ */
+export class CardTrace {
+  constructor() {
+    this.title = "";
+    this.type = "indicator";
+    this.mode = "number+delta";
+    this.value = 0;
+    this.number = { suffix: null };
+    this.delta = {
+      position: null,
+      reference: null,
+      increasing: null,
+      decreasing: null
+    };
+    this.domain = { x: [0, 1], y: [0, 1] };
+  }
+
+  set valuesArray(data) {
+    let last = data.slice(-1).pop();
+    let previous = data.slice(-2, -1).pop();
+    this.value = last;
+    this.delta.reference = previous;
+  }
+
+  set colorScale(type) {
+    if (type == "reverse") {
+      this.delta = {
+        position: "bottom",
+        reference: 0,
+        increasing: { color: "#FF4136" },
+        decreasing: { color: "#3D9970" }
+      };
+    } else {
+      // let default
+    }
+  }
+
+  bindTo(xaxis, yaxis) {
+    let _x1 = xaxis.domain[0];
+    let _x2 = xaxis.domain[1];
+    let _y1 = 0.8 * yaxis.domain[0];
+    let _y2 = 0.8 * yaxis.domain[1];
+
+    let dx = _x2 - _x1;
+    let dy = _y2 - _y1;
+
+    let reduction = 10;
+
+    this.domain.x = [_x1 + dx / reduction, _x2 - dx / reduction];
+    this.domain.y = [_y1 + dy / reduction, _y2 - dy / reduction];
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+<script src="scripts/search.js" defer></script>
+
+
+<script src="scripts/collapse.js" defer></script>
+
+
+</body>
+</html>
