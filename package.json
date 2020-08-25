@@ -1,0 +1,24 @@
+{
+  "name": "diglett",
+  "version": "0.0.1",
+  "description": "A data visualization library built on top of Plotly.js ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dvisionlab/diglett.git"
+  },
+  "keywords": [
+    "dataviz",
+    "charts",
+    "plotly"
+  ],
+  "author": "Mattia Ronzoni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dvisionlab/diglett/issues"
+  },
+  "homepage": "https://github.com/dvisionlab/diglett#readme"
+}
