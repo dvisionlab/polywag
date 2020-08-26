@@ -1,6 +1,8 @@
-![polywag image](https://i7.pngguru.com/preview/295/462/459/pokemon-adventures-poliwhirl-poliwag-politoed-evolv-thumbnail.jpg) 
-# POLYWAG :chart_with_upwards_trend:	
+<p align="center">
+  <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/060.png" width="100" title="hover text" alt="accessibility text">
+</p> 
 
+# POLYWAG :chart_with_upwards_trend:	
 A data visualization library built on top of Plotly.js 
 Current version : 0.0.1
 
