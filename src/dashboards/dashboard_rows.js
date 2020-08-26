@@ -1,9 +1,9 @@
 import Plotly from "plotly.js-dist";
 
 import { Layout } from "../layouts/layouts.js";
-import { lineTrace } from "../charts/scatters.js";
-import { cardTrace } from "../charts/indicators.js";
-import { histogramTrace } from "../charts/histograms.js";
+import { LineTrace } from "../charts/scatters.js";
+import { CardTrace } from "../charts/indicators.js";
+import { HistogramTrace } from "../charts/histograms.js";
 
 const keyUp = "temperature";
 const keyDown = "voc";
@@ -27,32 +27,32 @@ layout.annotations[1].text = keyDown;
 // =============================
 
 // Init line traces
-let line_top = new lineTrace("x2", "y");
+let line_top = new LineTrace("x2", "y");
 line_top.line.color = "rgba(231, 244, 89, 1.0)";
 
-let line_low = new lineTrace("x2", "y2");
+let line_low = new LineTrace("x2", "y2");
 line_low.line.color = "rgba(54, 180, 210, 1.0)";
 
 // Init card indicators
-let labelDown = new cardTrace();
+let labelDown = new CardTrace();
 labelDown.bindTo(layout.xaxis2, layout.yaxis2);
 labelDown.colorScale = "reverse";
 
-let labelUp = new cardTrace();
+let labelUp = new CardTrace();
 labelUp.range = [0, 10];
 labelUp.barSteps = [6, 8];
 labelUp.trafficLight = [6, 8];
 labelUp.bindTo(layout.xaxis, layout.yaxis);
 
 // Init upper hist
-let bar_top = new histogramTrace("x3", "y3", "h");
+let bar_top = new HistogramTrace("x3", "y3", "h");
 bar_top.color = "rgba(231, 244, 89, 0.7)";
 bar_top.ybins = {
   size: 0.1
 };
 
 // Init lower hist
-let bar_low = new histogramTrace("x4", "y4", "h");
+let bar_low = new HistogramTrace("x4", "y4", "h");
 bar_low.color = "rgba(54, 180, 210, 0.7)";
 bar_low.ybins = {
   size: 0.1

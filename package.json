@@ -20,6 +20,7 @@
     "Simone Manini <simone.manini@dvisionlab.com> (https://www.dvisionlab.com)"
   ],
   "dependencies": {
+    "plotly.js-dist": "^1.54.6",
     "lodash": "^4.17.15"
   },
   "devDependencies": {

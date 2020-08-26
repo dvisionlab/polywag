@@ -1,7 +1,7 @@
 import { Layout } from "../layouts/layouts.js";
-import { lineTrace } from "../charts/scatters.js";
-import { gaugeTrace, cardTrace } from "../charts/indicators.js";
-import { histogramTrace } from "../charts/histograms.js";
+import { LineTrace } from "../charts/scatters.js";
+import { GaugeTrace, CardTrace } from "../charts/indicators.js";
+import { HistogramTrace } from "../charts/histograms.js";
 
 // ===========================
 // Setup dashboard layout ====
@@ -14,26 +14,26 @@ let layout = new Layout("simple");
 // =============================
 
 // Init line traces
-let line_top = new lineTrace("x", "y");
-let line_low = new lineTrace("x", "y");
+let line_top = new LineTrace("x", "y");
+let line_low = new LineTrace("x", "y");
 line_low.line.color = "rgba(62, 108, 193 1.0)";
 
 // Init card indicator
-var card = new cardTrace();
+var card = new CardTrace();
 
 // Init gauge indicator with traffic light colors
-var gauge = new gaugeTrace();
+var gauge = new GaugeTrace();
 gauge.trafficLight = [3, 4];
 
 // Init upper hist
-let bar_sx = new histogramTrace("x2", "y2");
+let bar_sx = new HistogramTrace("x2", "y2");
 bar_sx.color = "rgba(62, 108, 193, 0.7)";
 bar_sx.xbins = {
   size: 3
 };
 
 // Init lower hist
-let bar_dx = new histogramTrace("x3", "y3");
+let bar_dx = new HistogramTrace("x3", "y3");
 bar_dx.color = "rgba(193, 147, 62, 0.7)";
 bar_dx.xbins = {
   size: 1

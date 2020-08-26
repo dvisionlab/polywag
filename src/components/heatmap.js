@@ -2,7 +2,7 @@ import Plotly from "plotly.js-dist";
 import { find } from "lodash";
 
 import { LayoutSingle } from "../layouts/LayoutSingle.js";
-import { heatmapTrace } from "../charts/heatmaps.js";
+import { HeatmapTrace } from "../charts/heatmaps.js";
 import { arraysToDateTimeMatrix } from "../utils/reshape.js";
 
 /**
@@ -19,7 +19,7 @@ export class HeatmapComponent {
     this.divId = divId;
     this.data = [];
     this.layout = new LayoutSingle();
-    this.heatmapchart = new heatmapTrace("x", "y");
+    this.heatmapchart = new HeatmapTrace("x", "y");
     this.color =
       config && config.color ? config.color : "rgba(231, 244, 89, 0.7)";
     this.title = config && config.title ? config.title : "";

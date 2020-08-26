@@ -1,5 +1,4 @@
 import { default_font } from "../utils/defaults";
-// import { TimeAxis } from "../common/axis";
 
 export class LayoutTimeserie {
   constructor() {
@@ -90,7 +89,7 @@ export class LayoutTimeserie {
         yref: "paper",
         x: 0.4,
         xanchor: "center",
-        y: 0.8,
+        y: 1.06,
         yanchor: "center",
         text: "",
         font: {
