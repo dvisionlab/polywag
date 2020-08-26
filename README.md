@@ -10,7 +10,7 @@ This library provides fast and pre-built components to represent different kind 
 
 ## API
 
-See /docs/index.html
+See documentation at http://www.dvisionlab.com/polywag
 
 ## Installation
 
