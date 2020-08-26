@@ -1,5 +1,5 @@
 {
-  "name": "diglett",
+  "name": "polywag",
   "version": "0.0.1",
   "description": "A data visualization library built on top of Plotly.js ",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dvisionlab/diglett.git"
+    "url": "git+https://github.com/dvisionlab/polywag.git"
   },
   "keywords": [
     "dataviz",
@@ -27,7 +27,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/dvisionlab/diglett/issues"
+    "url": "https://github.com/dvisionlab/polywag/issues"
   },
-  "homepage": "https://github.com/dvisionlab/diglett#readme"
+  "homepage": "https://github.com/dvisionlab/polywag#readme"
 }
