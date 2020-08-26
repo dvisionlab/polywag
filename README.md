@@ -1,12 +1,19 @@
 # DIGLETT :chart_with_upwards_trend:	
 
 A data visualization library built on top of Plotly.js 
+Current version : 0.0.1
+
+This library provides fast and pre-built components to represent different kind of data in a clear and communicative way.
 
 ## API
 
 See /docs/index.html
 
-## EXAMPLE
+## Installation
+
+`yarn add larvitar`
+
+## Example
 
     let data = {
         value: [1,2,3,4,5],
@@ -16,3 +23,9 @@ See /docs/index.html
     let hm = new TimeseriesComponent("chart-container", { title: "A chart", color: "Viridis" };
 
     hm.update(data);
+    
+## Build docs
+
+Create `template` folder into project root 
+Clone docdash repo into /template folder
+`yarn run generate-docs`
