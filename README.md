@@ -1,3 +1,4 @@
+![polywag image](https://i7.pngguru.com/preview/295/462/459/pokemon-adventures-poliwhirl-poliwag-politoed-evolv-thumbnail.jpg) 
 # POLYWAG :chart_with_upwards_trend:	
 
 A data visualization library built on top of Plotly.js 
@@ -34,3 +35,5 @@ Clone docdash repo (http://clenemt.github.io/docdash/) into /template folder
 
 Mattia Ronzoni (https://github.com/ronzim)  
 Simone Manini (https://github.com/daron1337)
+
+![dvisionlab logo](https://www.dvisionlab.com/images/logo_dv.png)
