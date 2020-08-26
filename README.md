@@ -11,7 +11,7 @@ See /docs/index.html
 
 ## Installation
 
-`yarn add larvitar`
+`yarn add polywag`
 
 ## Example
 
