@@ -1,4 +1,4 @@
-# DIGLETT :chart_with_upwards_trend:	
+# POLYWAG :chart_with_upwards_trend:	
 
 A data visualization library built on top of Plotly.js 
 Current version : 0.0.1
