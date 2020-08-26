@@ -26,6 +26,6 @@ See /docs/index.html
     
 ## Build docs
 
-Create `template` folder into project root 
-Clone docdash repo into /template folder
+Create `template` folder into project root  
+Clone docdash repo into /template folder  
 `yarn run generate-docs`
