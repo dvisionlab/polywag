@@ -1,11 +1,11 @@
 import {
   initDashboard,
   refreshDashboard
-} from "./dashboards/dashboard_quadrows";
-import { initMaps, refreshMaps } from "./dashboards/dashboard_maps";
-import { initStats, refreshStats } from "./dashboards/dashboard_hm";
-import { TimeserieComponent } from "./components/timeserie";
-import { HeatmapComponent } from "./components/heatmap";
+} from "./src/dashboards/dashboard_quadrows";
+import { initMaps, refreshMaps } from "./src/dashboards/dashboard_maps";
+import { initStats, refreshStats } from "./src/dashboards/dashboard_hm";
+import { TimeserieComponent } from "./src/components/timeserie";
+import { HeatmapComponent } from "./src/components/heatmap";
 
 const bindingFunctions = {
   dashboard: {

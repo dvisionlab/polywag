@@ -1,7 +1,7 @@
 import Plotly from "plotly.js-dist";
 
 import { Layout, Coloraxis } from "../layouts/layouts.js";
-import { heatmapTrace } from "../charts/heatmaps.js";
+import { HeatmapTrace } from "../charts/heatmaps.js";
 import { arraysToDateTimeMatrix } from "../utils/reshape.js";
 
 // ===========================
@@ -26,10 +26,10 @@ let layout = new Layout("simple");
 // =============================
 
 // Init heatmap traces
-let hm_upleft = new heatmapTrace("x", "y");
-let hm_downleft = new heatmapTrace("x2", "y2");
-let hm_upright = new heatmapTrace("x3", "y3");
-let hm_downright = new heatmapTrace("x4", "y4");
+let hm_upleft = new HeatmapTrace("x", "y");
+let hm_downleft = new HeatmapTrace("x2", "y2");
+let hm_upright = new HeatmapTrace("x3", "y3");
+let hm_downright = new HeatmapTrace("x4", "y4");
 
 layout.coloraxis = new Coloraxis({ x: -0.13, y: 0.76 }, 0.5, "Viridis");
 layout.coloraxis2 = new Coloraxis({ x: -0.13, y: 0.22 }, 0.5, "Viridis");

@@ -1,9 +1,9 @@
 import Plotly from "plotly.js-dist";
 
 import { Layout } from "../layouts/layouts.js";
-import { lineTrace } from "../charts/scatters.js";
-import { cardTrace } from "../charts/indicators.js";
-import { histogramTrace } from "../charts/histograms.js";
+import { LineTrace } from "../charts/scatters.js";
+import { CardTrace } from "../charts/indicators.js";
+import { HistogramTrace } from "../charts/histograms.js";
 
 const keyTL = "temperature";
 const keyBL = "voc";
@@ -45,55 +45,55 @@ layout.annotations[3].textangle = 90;
 
 // Init line traces
 
-let line_tl = new lineTrace("x2", "y");
+let line_tl = new LineTrace("x2", "y");
 line_tl.line.color = colorTL;
 
-let line_bl = new lineTrace("x2", "y2");
+let line_bl = new LineTrace("x2", "y2");
 line_bl.line.color = colorBL;
 
-let line_tr = new lineTrace("x5", "y5");
+let line_tr = new LineTrace("x5", "y5");
 line_tr.line.color = colorTR;
 
-let line_br = new lineTrace("x6", "y6");
+let line_br = new LineTrace("x6", "y6");
 line_br.line.color = colorBR;
 
 // Init card indicators
 
-let labelTL = new cardTrace();
+let labelTL = new CardTrace();
 labelTL.bindTo(layout.xaxis, layout.yaxis);
 
-let labelBL = new cardTrace();
+let labelBL = new CardTrace();
 labelBL.bindTo(layout.xaxis2, layout.yaxis2);
 labelTL.colorScale = "reverse";
 
-let labelTR = new cardTrace();
+let labelTR = new CardTrace();
 labelTR.bindTo(layout.xaxis5, layout.yaxis5);
 
-let labelBR = new cardTrace();
+let labelBR = new CardTrace();
 labelBR.bindTo(layout.xaxis6, layout.yaxis6);
 labelTL.colorScale = "reverse";
 
 // Init histograms
 
-let bar_tl = new histogramTrace("x3", "y3", "h");
+let bar_tl = new HistogramTrace("x3", "y3", "h");
 bar_tl.color = colorTL;
 bar_tl.ybins = {
   size: 0.1
 };
 
-let bar_bl = new histogramTrace("x4", "y4", "h");
+let bar_bl = new HistogramTrace("x4", "y4", "h");
 bar_bl.color = colorBL;
 bar_bl.ybins = {
   size: 0.1
 };
 
-let bar_tr = new histogramTrace("x7", "y7", "h");
+let bar_tr = new HistogramTrace("x7", "y7", "h");
 bar_tr.color = colorTR;
 bar_tr.ybins = {
   size: 0.5
 };
 
-let bar_br = new histogramTrace("x8", "y8", "h");
+let bar_br = new HistogramTrace("x8", "y8", "h");
 bar_br.color = colorBR;
 bar_br.ybins = {
   size: 1

@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import { find } from "lodash";
 
 import { default_font } from "../utils/defaults";
