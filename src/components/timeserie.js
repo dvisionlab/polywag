@@ -110,13 +110,6 @@ export class TimeserieComponent {
       typeof data.timestamp[0] === "number"
         ? data.timestamp
         : data.timestamp.map(t => Date.parse(t));
-
-    // FIXME why 2 equal ts at the end ?
-    console.log(
-      this.linechart.x[this.linechart.x.length - 1] -
-        this.linechart.x[this.linechart.x.length - 2]
-    );
-
     this.linechart.y = data.value;
     // update hist chart
     this.histchart.x = data.value;

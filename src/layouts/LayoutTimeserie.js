@@ -2,7 +2,6 @@ import { default_font } from "../utils/defaults";
 
 export class LayoutTimeserie {
   constructor(timeSpan) {
-    console.log("timeSpan", timeSpan);
     // general properties
     this.showlegend = false;
     this.legend = {
