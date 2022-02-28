@@ -25,11 +25,17 @@ jobs:
         uses: actions/setup-node@v1.4.4
 
       # Login to npm
-      - name: Login to npm
-        run: |
-          npm-cli-login -u '${{ secrets.NPM_USERNAME }}' -p '${{ secrets.NPM_PASSWORD }}' -e '${{ secrets.NPM_EMAIL }}'
+      # - name: Login to npm
+      #  run: |
+      #    npm-cli-login -u '${{ secrets.NPM_USERNAME }}' -p '${{ secrets.NPM_PASSWORD }}' -e '${{ secrets.NPM_EMAIL }}'
+
+      # Publish to npm
+      #- name: Publish to npm
+      #  run: |
+      #    npm publish
 
       # Publish to npm
       - name: Publish to npm
         run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
           npm publish
