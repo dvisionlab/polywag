@@ -20,12 +20,12 @@ export class TimeserieComponent {
   constructor(divId, config) {
     this.divId = divId;
     this.data = [];
-    this.layout = new LayoutTimeserie();
+    this.layout = new LayoutTimeserie(config.axisSpan);
     this.labelchart = new CardTrace();
     this.linechart = new LineTrace("x1", "y1");
     this.histchart = new HistogramTrace("x2", "y2", "h");
 
-    this.axisSpan = 3600000 / 12; // 5min
+    this.axisSpan = config.axisSpan ? config.axisSpan : null; // axis span in ms
     this.color =
       config && config.color ? config.color : "rgba(231, 244, 89, 0.7)";
     this.title = config && config.title ? config.title : "";
@@ -105,14 +105,27 @@ export class TimeserieComponent {
     this.histchart.ybins.size = this.histchart.ybins.size
       ? this.histchart.ybins.size
       : this.computeBestNumberOfBins();
-    //update line chart
-    this.linechart.x = data.timestamp.map(t => Date.parse(t));
+    // update line chart (parse data if not a timestamp)
+    this.linechart.x =
+      typeof data.timestamp[0] === "number"
+        ? data.timestamp
+        : data.timestamp.map(t => Date.parse(t));
+
+    // FIXME why 2 equal ts at the end ?
+    console.log(
+      this.linechart.x[this.linechart.x.length - 1] -
+        this.linechart.x[this.linechart.x.length - 2]
+    );
+
     this.linechart.y = data.value;
-    //update hist chart
+    // update hist chart
     this.histchart.x = data.value;
     this.histchart.y = data.value;
     //update indicators
     this.labelchart.valuesArray = data.value;
+    // update axis
+    this.scrollXaxis();
+    this.resizeYaxis();
     //update render
     Plotly.react(
       this.divId,
@@ -120,9 +133,6 @@ export class TimeserieComponent {
       this.layout,
       this.plotlyConfiguration
     );
-
-    this.scrollXaxis();
-    this.resizeYaxis();
   }
 
   /**
@@ -141,8 +151,8 @@ export class TimeserieComponent {
     let delta = subseriesMaxValue - subseriesMinValue;
 
     let newRange = [
-      subseriesMinValue - delta / 10,
-      subseriesMaxValue + delta / 10
+      Math.floor(subseriesMinValue - delta / 10),
+      Math.ceil(subseriesMaxValue + delta / 10)
     ];
 
     // apply
@@ -161,10 +171,9 @@ export class TimeserieComponent {
     let dataSpan =
       new Date(this.data.timestamp[datalength - 1]) -
       new Date(this.data.timestamp[0]);
-    let axisSpan = 3600000 / 12; // 5min
-    if (dataSpan > axisSpan) {
-      let end = new Date(this.data.timestamp[datalength - 1]);
-      let start = end - axisSpan;
+    if (Math.abs(dataSpan) > this.axisSpan) {
+      let end = this.data.timestamp[datalength - 1];
+      let start = end - this.axisSpan;
       this.layout.xaxis.range = [start, end];
     }
   }

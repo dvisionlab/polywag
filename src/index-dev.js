@@ -4,17 +4,39 @@ import { TimeserieComponent } from "../index";
 // testing the build
 // import * as plw from "../dist/polywag";
 // console.log(plw.TimeserieComponent);
+const ELEMENTS = 10;
+const msPerMin = 60000;
+const minPerHours = 60;
 
 let data = {
-  value: [1, 2, 3, 4, 5],
-  timestamp: [
-    1598368228264, 1598368240796, 1598368248441, 1598368256295, 1598368263938
-  ]
+  value: new Array(ELEMENTS).fill(0).map((e, i) => i * Math.random()),
+  timestamp: new Array(ELEMENTS)
+    .fill(0)
+    .map((e, i) => Date.now() - 1 * minPerHours * msPerMin * i)
+    .reverse()
 };
 
-let hm = new plw.TimeserieComponent("chart-container", {
+console.log(
+  "initial data ts",
+  data.timestamp.map(t => new Date(t))
+);
+
+let hm = new TimeserieComponent("chart-container", {
   title: "A chart",
-  color: "Viridis"
+  color: "Viridis",
+  axisSpan: 5 * minPerHours * msPerMin
 });
 
 hm.update(data);
+
+setInterval(() => {
+  let newValue = Math.random() * 10;
+  let newTime = (data.timestamp[data.timestamp.length - 1] += 20 * msPerMin);
+
+  data.value.push(newValue);
+  data.timestamp.push(newTime);
+
+  console.log(newValue, newTime);
+
+  hm.update(data);
+}, 2000);

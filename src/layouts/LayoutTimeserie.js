@@ -1,7 +1,8 @@
 import { default_font } from "../utils/defaults";
 
 export class LayoutTimeserie {
-  constructor() {
+  constructor(timeSpan) {
+    console.log("timeSpan", timeSpan);
     // general properties
     this.showlegend = false;
     this.legend = {
@@ -27,7 +28,7 @@ export class LayoutTimeserie {
     // this.yaxis2 = new BaseAxis([0, 1.1], [0.0, 1.0], "x2", "right");
     this.xaxis = {
       title: "",
-      range: [Date.now() - 3600000 / 12, Date.now()], // timespan now - 2 h
+      range: [Date.now() - timeSpan, Date.now()],
       domain: [0, 0.8],
       anchor: "y1",
       zeroline: true,
